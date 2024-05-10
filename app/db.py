@@ -12,7 +12,7 @@ class BookingManager:
     def __init__(self):
         self.cursor = db.cursor()
 
-    def get_time_slots(self, dow):
+    def _get_time_slots(self, dow):
         self.cursor.execute("SELECT * FROM appointment WHERE day_of_week = %s", (dow,))
         records = self.cursor.fetchall()
 
@@ -28,13 +28,13 @@ class BookingManager:
 
         return slots
 
-    def time_to_slot(self, t, dow):
-        slots = self.get_time_slots(dow)
+    def _time_to_slot(self, t, dow):
+        slots = self._get_time_slots(dow)
         for slot in slots:
             if slot['start_time'] <= t <= slot['end_time']:
                 return slot['idappointment']
             
-    def find_booked_slots(self, d, dow):
+    def _find_booked_slots(self, d, dow):
         self.cursor.execute("SELECT idappointment FROM booking WHERE DATE(datetime_of_appointment) = %s", (d,))
         records = self.cursor.fetchall()
 
@@ -46,9 +46,9 @@ class BookingManager:
             slots.append(slot)
         return slots
             
-    def _find_available_slot(self, d, dow):
-        booked_slots = self.find_booked_slots(d, dow)
-        all_available_slots = self.get_time_slots(dow)
+    def _find_available_slots(self, d, dow):
+        booked_slots = self._find_booked_slots(d, dow)
+        all_available_slots = self._get_time_slots(dow)
 
         available_slots = []
         for booked_slot in booked_slots:

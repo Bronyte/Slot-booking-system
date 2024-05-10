@@ -31,9 +31,15 @@ def home():
             datetime_appointment = datetime.strptime(date_time, '%Y-%m-%d %H:%M:%S')
 
             # Book the appointment
-            BookingManager()._book(iduser, datetime_order, datetime_appointment, no_of_cars, special_requests)
+            booked_slots = BookingManager()._find_booked_slots
+            available_slots = BookingManager()._find_available_slots
 
-            flash("Booking successful")
+            picked_slot = BookingManager()._time_to_slot
+
+            if picked_slot['idappointment'] in available_slots['idappointment']:
+                BookingManager()._book(iduser, datetime_order, datetime_appointment, no_of_cars, special_requests)
+                flash("Booking successful")
+            flash("Booking unsuccessful")
         except Exception as e:
             flash("Invalid operation: " + str(e))
     return render_template("index.html")
