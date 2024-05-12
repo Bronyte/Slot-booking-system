@@ -4,8 +4,8 @@ from datetime import datetime
 db = mysql.connector.connect(
     host='localhost',
     user='root',
-    password='PASSWORD',
-    database='NAME'
+    password='vlthU*W_Fr94o=Eme6Re',
+    database='car_wash_db'
 )
 
 class BookingManager:
